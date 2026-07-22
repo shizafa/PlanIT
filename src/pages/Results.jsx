@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { supabase } from '../lib/supabaseClient.js'
 import { useAuth } from '../lib/AuthContext.jsx'
 import { friendlyAIError } from '../lib/friendlyAIError.js'
+import { parseApiResponse } from '../lib/parseApiResponse.js'
 import { toggleFavorite } from '../lib/toggleFavorite.js'
 import DayTabs from '../components/DayTabs.jsx'
 import TimelineItem from '../components/TimelineItem.jsx'
@@ -70,10 +71,7 @@ function Results() {
         },
         body: JSON.stringify({ day: activeDay, activityIndex }),
       })
-      const payload = await response.json()
-      if (!response.ok) {
-        throw new Error(payload.error || 'Something went wrong finding alternatives.')
-      }
+      const payload = await parseApiResponse(response)
       setAlternatives(payload.alternatives)
     } catch (err) {
       setSwapError(friendlyAIError(err.message))

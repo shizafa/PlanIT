@@ -5,5 +5,8 @@ export function friendlyAIError(message) {
   if (message.includes('503') || message.toLowerCase().includes('unavailable')) {
     return 'The AI model is briefly unavailable right now. Wait a few seconds and try again.'
   }
+  if (message.includes('504') || message.toLowerCase().includes('gateway timeout')) {
+    return "This is taking longer than usual — the AI is still working, but the server gave up waiting. Please try again."
+  }
   return message
 }

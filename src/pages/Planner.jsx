@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTripStore } from '../store/tripStore.js'
 import { useAuth } from '../lib/AuthContext.jsx'
 import { friendlyAIError } from '../lib/friendlyAIError.js'
+import { parseApiResponse } from '../lib/parseApiResponse.js'
 import PillGroup from '../components/PillGroup.jsx'
 import AILoadingMessage from '../components/AILoadingMessage.jsx'
 
@@ -87,10 +88,7 @@ function Planner() {
         },
         body: JSON.stringify(draft),
       })
-      const payload = await response.json()
-      if (!response.ok) {
-        throw new Error(payload.error || 'Something went wrong generating your itinerary.')
-      }
+      const payload = await parseApiResponse(response)
       resetDraft()
       navigate(`/trip/${payload.trip.id}`)
     } catch (err) {
